@@ -3,6 +3,8 @@ package me.laurence.radialShooter.entities;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import me.laurence.radialShooter.RadialShooter;
+
 public abstract class BaseEntity {
 
 	protected Point position;
@@ -17,6 +19,8 @@ public abstract class BaseEntity {
 
 	public abstract void updateOnTick();
 	
-	public abstract void destroy();
+	public void destroy(){
+		RadialShooter.instance.stage.removeEntity(this);
+	}
 
 }

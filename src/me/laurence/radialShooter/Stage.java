@@ -14,13 +14,18 @@ public class Stage {
 		addEntity(new PlayerEntity());
 	}
 	
-	public void addEntity(BaseEntity e){
+	public void addEntity(BaseEntity e) {
 		entities.add(e);
+	}
+	
+	public void removeEntity(BaseEntity e){
+		entities.remove(e);
 	}
 	
 	public void updateOnTick(){
 		entities.forEach(e -> e.updateOnTick());
 	}
+	
 	
 	public void render(Graphics g){
 		entities.forEach(e -> e.render(g));

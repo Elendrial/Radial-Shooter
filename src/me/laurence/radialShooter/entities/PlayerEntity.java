@@ -10,7 +10,7 @@ import me.laurence.radialShooter.graphics.InputHandler;
 public class PlayerEntity extends BaseEntity implements IInputUser{
 	
 	private int rotation, deltaRotation, fireDelay, maxFireDelay;
-	private double xRotOffset, yRotOffset, rotationMultiplier;
+	private double xRotOffset, yRotOffset, rotationMultiplier, bulletVelocity;
 	private boolean firing;
 	
 	public PlayerEntity(){
@@ -24,6 +24,7 @@ public class PlayerEntity extends BaseEntity implements IInputUser{
 		
 		fireDelay = 20;
 		maxFireDelay = 20;
+		bulletVelocity = 5;
 		
 		firing = false;
 		updateRotation();
@@ -52,7 +53,8 @@ public class PlayerEntity extends BaseEntity implements IInputUser{
 	}
 	
 	public void shoot(){
-		System.out.println("shoot");
+		BulletEntity e = new BulletEntity((int) (xRotOffset * bulletVelocity), (int) (yRotOffset * bulletVelocity));
+		RadialShooter.instance.stage.addEntity(e);
 	}
 	
 	@Override
@@ -68,6 +70,7 @@ public class PlayerEntity extends BaseEntity implements IInputUser{
 	
 	public void addToRotation(int r){
 		rotation += r;
+		rotation %= 360;
 		updateRotation();
 	}
 	
