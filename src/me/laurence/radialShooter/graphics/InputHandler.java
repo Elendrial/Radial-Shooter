@@ -2,43 +2,28 @@ package me.laurence.radialShooter.graphics;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
-public class InputHandler implements MouseListener, KeyListener{
+import me.laurence.radialShooter.IInputUser;
+
+public class InputHandler implements KeyListener{
 
 	public static InputHandler instance = new InputHandler();
+	public static ArrayList<IInputUser> inputListeners = new ArrayList<IInputUser>();
 	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
+		inputListeners.forEach(i -> i.keyPressed(arg0));
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
+		inputListeners.forEach(i -> i.keyReleased(arg0));
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
+		inputListeners.forEach(i -> i.keyTyped(arg0));
 	}
 
 }

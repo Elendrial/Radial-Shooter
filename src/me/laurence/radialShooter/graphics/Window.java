@@ -44,7 +44,6 @@ public class Window implements Runnable {
 	public void createDisplay(){
 		this.display = new Display(this);
 		display.addKeyListener(InputHandler.instance);
-		display.addMouseListener(InputHandler.instance);
 		this.frame.add(this.display);
 	}
 

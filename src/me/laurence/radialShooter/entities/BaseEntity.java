@@ -16,5 +16,7 @@ public abstract class BaseEntity {
 	public abstract void render(Graphics g);
 
 	public abstract void updateOnTick();
+	
+	public abstract void destroy();
 
 }
