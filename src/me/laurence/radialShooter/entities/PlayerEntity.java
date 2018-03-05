@@ -54,6 +54,7 @@ public class PlayerEntity extends BaseEntity implements IInputUser{
 	
 	public void shoot(){
 		BulletEntity e = new BulletEntity((int) (xRotOffset * bulletVelocity), (int) (yRotOffset * bulletVelocity));
+		e.position = position.getLocation();
 		RadialShooter.instance.stage.addEntity(e);
 	}
 	

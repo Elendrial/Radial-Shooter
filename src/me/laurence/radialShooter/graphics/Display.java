@@ -13,7 +13,7 @@ public class Display extends Canvas{
 	}
 	
 	public void render(Graphics g){
-		RadialShooter.instance.stage.render(g);
+		try{RadialShooter.instance.stage.render(g);} catch(Exception e){e.printStackTrace();}
 	}
 	
 }

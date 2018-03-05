@@ -63,7 +63,7 @@ public class RadialShooter implements Runnable{
             unprocessed += (now - then) / nsPerTick;
             then = now;
             while(unprocessed >= 1){
-                updateOnTick();
+                try{updateOnTick();} catch(Exception e){e.printStackTrace();}
                 tick++;
                 unprocessed--;
             }
