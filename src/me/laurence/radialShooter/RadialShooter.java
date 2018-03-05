@@ -1,5 +1,7 @@
 package me.laurence.radialShooter;
 
+import java.util.Random;
+
 import me.laurence.radialShooter.graphics.Window;
 
 public class RadialShooter implements Runnable{
@@ -8,6 +10,7 @@ public class RadialShooter implements Runnable{
 	public static RadialShooter instance;
 	public static boolean isRunning;
 	public static int targetTPS = 30;
+	public static Random rand = new Random();
 	
 	public static void main(String[] args) {
 		startGame();
@@ -45,6 +48,11 @@ public class RadialShooter implements Runnable{
 
 	public void updateOnTick(){
 		stage.updateOnTick();
+		
+		// Spawning rocks:
+		if(rand.nextFloat() < 0.05){ // 0.05 every tick : ~1.5 every second
+			// TODO
+		}
 	}
 	
 	@Override
