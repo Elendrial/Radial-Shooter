@@ -2,6 +2,7 @@ package me.laurence.radialShooter;
 
 import java.util.Random;
 
+import me.laurence.radialShooter.entities.RockEntity;
 import me.laurence.radialShooter.graphics.Window;
 
 public class RadialShooter implements Runnable{
@@ -50,14 +51,27 @@ public class RadialShooter implements Runnable{
 		stage.updateOnTick();
 		
 		// Spawning rocks:
-		if(rand.nextFloat() < 0.05){ // 0.05 every tick : ~1.5 every second
-			// TODO
+		
+		if(rand.nextFloat() < 0.02){ // 0.05 every tick : avg of 1.5 every second
+			boolean side = rand.nextBoolean();
+			int x, y;
+			if(side) {
+				x = rand.nextBoolean() ? 1 : w.width-1;
+				y = rand.nextInt(w.height-2)+1;
+			}
+			else {
+				y = rand.nextBoolean() ? 1 : w.height-1;
+				x = rand.nextInt(w.width-2)+1;
+			}
+			
+			RockEntity e = new RockEntity(new Vector(x,y));
+			stage.addEntity(e);
 		}
 	}
 	
 	@Override
     public void run() {
-        int fps = 0, tick = 0;
+        int tick = 0;
         
         double fpsTimer = System.currentTimeMillis();
         double secondsPerTick = 1D / targetTPS;
@@ -82,13 +96,11 @@ public class RadialShooter implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            
-            fps++;
 
             // If the current time is 1 second greater than the last time we printed
             if(System.currentTimeMillis() - fpsTimer >= 1000){
-                System.out.printf("FPS: %d, TPS: %d%n", fps, tick);
-                fps = 0; tick = 0;
+                System.out.printf("FPS: %d, TPS: %d%n", w.FPS, tick);
+                tick = 0;
                 fpsTimer += 1000;
             }
         }

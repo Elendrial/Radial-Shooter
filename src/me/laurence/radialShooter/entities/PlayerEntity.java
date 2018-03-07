@@ -53,15 +53,15 @@ public class PlayerEntity extends BaseEntity implements IInputUser{
 	}
 	
 	public void shoot(){
-		BulletEntity e = new BulletEntity((int) (xRotOffset * bulletVelocity), (int) (yRotOffset * bulletVelocity));
+		BulletEntity e = new BulletEntity(xRotOffset * bulletVelocity, yRotOffset * bulletVelocity);
 		e.position = position.getLocation();
 		RadialShooter.instance.stage.addEntity(e);
 	}
 	
 	@Override
 	public void render(Graphics g) {
-		g.drawArc(position.x - collisionBox.x/2, position.y-collisionBox.y/2, collisionBox.x, collisionBox.y, 0, 360);
-		g.drawLine(position.x, position.y, (int) (position.x + xRotOffset * collisionBox.x/2), (int) (position.y + yRotOffset * collisionBox.y/2));
+		g.drawArc((int) (position.getX() - collisionBox.getX()/2), (int) (position.getY()-collisionBox.getY()/2), (int) collisionBox.getX(), (int) collisionBox.getY(), 0, 360);
+		g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + xRotOffset * collisionBox.getX()/2), (int) (position.getY() + yRotOffset * collisionBox.getY()/2));
 	}
 	
 	public void setRotation(int rotation){

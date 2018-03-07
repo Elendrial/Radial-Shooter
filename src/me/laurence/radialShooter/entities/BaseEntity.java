@@ -1,19 +1,19 @@
 package me.laurence.radialShooter.entities;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Rectangle;
 
 import me.laurence.radialShooter.RadialShooter;
+import me.laurence.radialShooter.Vector;
 
 public abstract class BaseEntity {
 
-	public Point position;
-	public Point collisionBox;
+	public Vector position;
+	public Vector collisionBox;
 	
 	public BaseEntity(){
-		position = new Point(0,0);
-		collisionBox = new Point(0,0);
+		position = new Vector(0,0);
+		collisionBox = new Vector(0,0);
 	}
 	
 	public abstract void render(Graphics g);
@@ -25,7 +25,7 @@ public abstract class BaseEntity {
 	}
 
 	public Rectangle getCollisionRect(){
-		return new Rectangle(position.x, position.y, collisionBox.x, collisionBox.y);
+		return new Rectangle((int) (position.getX()), (int) (position.getY()), (int) (collisionBox.getX()), (int) (collisionBox.getY()));
 	}
 	
 }

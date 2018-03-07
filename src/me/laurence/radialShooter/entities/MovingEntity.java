@@ -1,24 +1,24 @@
 package me.laurence.radialShooter.entities;
 
-import java.awt.Point;
+import me.laurence.radialShooter.Vector;
 
 public abstract class MovingEntity extends BaseEntity{
 
-	public Point velocity;
+	public Vector velocity;
 	
 	public MovingEntity(){
 		super();
-		velocity = new Point(0,0);
+		velocity = new Vector(0,0);
 	}
 	
-	public MovingEntity(int x, int y){
+	public MovingEntity(double x, double y){
 		super();
-		velocity = new Point(x, y);
+		velocity = new Vector(x, y);
 	}
 
 	@Override
 	public void updateOnTick() {
-		position.translate((int) velocity.getX(), (int) velocity.getY());
+		position.translate(velocity.getX(), velocity.getY());
 	}
 
 }

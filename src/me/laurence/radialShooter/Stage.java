@@ -61,7 +61,7 @@ public class Stage {
 		ArrayList<BaseEntity> collidingWith = new ArrayList<BaseEntity>();
 		
 		for(BaseEntity e : entities){
-			if(e.getCollisionRect().intersects(toCheck.getCollisionRect())){
+			if(e.getCollisionRect().intersects(toCheck.getCollisionRect()) && e != toCheck){
 				collidingWith.add(e);
 			}
 		}

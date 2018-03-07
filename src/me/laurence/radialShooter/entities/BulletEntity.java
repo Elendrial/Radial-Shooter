@@ -8,19 +8,19 @@ public class BulletEntity extends MovingEntity{
 	
 	public BulletEntity(){ super(); }
 	
-	public BulletEntity(int x, int y){ super(x, y); }
+	public BulletEntity(double x, double y){ super(x, y); this.collisionBox.setLocation(x * 2, y * 2);}
 	
 	@Override
 	public void updateOnTick(){
 		super.updateOnTick();
-		if(position.x < 0 || position.y < 0 || position.x > RadialShooter.w.width || position.y > RadialShooter.w.height){
+		if(position.getX() < 0 || position.getY() < 0 || position.getX() > RadialShooter.w.width || position.getY() > RadialShooter.w.height){
 			destroy();
 		}
 	}
 
 	@Override
 	public void render(Graphics g) {
-		g.drawLine(position.x, position.y, (int) (position.x + velocity.getX() * 2), (int) (position.y + velocity.getY() * 2));
+		g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + collisionBox.getX()), (int) (position.getY() + collisionBox.getY()));
 	}
 
 }

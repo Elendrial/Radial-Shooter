@@ -84,7 +84,7 @@ public class Window implements Runnable {
 
 			// This is NOT to sleep, but to limit the game loop
 			try {
-				Thread.sleep(10);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
