@@ -1,5 +1,7 @@
 package me.laurence.radialShooter;
 
+import java.awt.Rectangle;
+
 // Basically an implementation of Point but with doubles instead of ints with minor added functionality.
 public class Vector {
 	private double x, y;
@@ -30,14 +32,16 @@ public class Vector {
 		this.y = y;
 	}
 	
-	public void translate(Vector v) {
+	public Vector translate(Vector v) {
 		x += v.x;
 		y += v.y;
+		return this;
 	}
 	
-	public void translate(double vx, double vy) {
+	public Vector translate(double vx, double vy) {
 		x += vx;
 		y += vy;
+		return this;
 	}
 	
 	public void setLocation(Vector v) {
@@ -77,5 +81,14 @@ public class Vector {
 	
 	public String toString() {
 		return "(" + x + ", " + y + ")";
+	}
+	
+	public static Rectangle convertToRectangle(Vector a, Vector b){
+		double x1 = a.x < b.x ? a.x : b.x, x2 = a.x > b.x ? a.x : b.x;
+		double y1 = a.y < b.y ? a.y : b.y, y2 = a.y > b.y ? a.y : b.y;
+		if(x2 - x1 == 0) x2 += 1;
+		if(y2 - y1 == 0) y2 += 1;
+		
+		return new Rectangle((int) x1, (int) y1, (int) (x2-x1), (int) (y2-y1));
 	}
 }

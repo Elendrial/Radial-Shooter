@@ -13,6 +13,8 @@ public class RadialShooter implements Runnable{
 	public static int targetTPS = 30;
 	public static Random rand = new Random();
 	
+	public static boolean DEBUG = false;
+	
 	public static void main(String[] args) {
 		startGame();
 	}
@@ -51,8 +53,7 @@ public class RadialShooter implements Runnable{
 		stage.updateOnTick();
 		
 		// Spawning rocks:
-		
-		if(rand.nextFloat() < 0.02){ // 0.05 every tick : avg of 1.5 every second
+		if(rand.nextFloat() < 0.01){ // 0.01 every tick : avg of 0.3 every second
 			boolean side = rand.nextBoolean();
 			int x, y;
 			if(side) {

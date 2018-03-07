@@ -1,5 +1,6 @@
 package me.laurence.radialShooter.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -12,15 +13,15 @@ public class RockEntity extends MovingEntity{
 		super();
 		this.collisionBox.setLocation(15, 15);
 		position.setLocation(p.getX(), p.getY());
-		setVelocity(2);
-		System.out.println("Spawned rock at: " + position.getX() + ", " + position.getY() + "\t moving at: " + velocity.getX() + ", " + velocity.getY());
+		setVelocity(1.7);
+		if(RadialShooter.DEBUG) System.out.println("Spawned rock at: " + position.getX() + ", " + position.getY() + "\t moving at: " + velocity.getX() + ", " + velocity.getY());
 	}
 	
 	public RockEntity(Vector p, int velocity){
 		super();
 		this.collisionBox.setLocation(10, 10);
 		position.setLocation(p.getX(), p.getY());
-		setVelocity(3);
+		setVelocity(velocity);
 	}
 	
 	public void setVelocity(double velocity) {
@@ -32,7 +33,7 @@ public class RockEntity extends MovingEntity{
 		super.updateOnTick();
 		ArrayList<BaseEntity> entities = RadialShooter.instance.stage.getCollidingEntities(this);
 		for(BaseEntity e : entities){
-			System.out.println("hit by " + e);
+			if(RadialShooter.DEBUG) System.out.println("hit by " + e);
 			if(e instanceof BulletEntity){
 				this.destroy();
 				return;
@@ -47,7 +48,12 @@ public class RockEntity extends MovingEntity{
 	
 	@Override
 	public void render(Graphics g) {
-		//g.drawArc(position.getX(), position.getY(), collisionBox.getX(), collisionBox.getY(), 0, 360);
-		g.drawRect((int) position.getX(), (int) position.getY(), (int) collisionBox.getX(), (int) collisionBox.getY());
+		g.drawArc((int) (position.getX()), (int) (position.getY()), (int) (collisionBox.getX()), (int) (collisionBox.getY()), 0, 360);
+		
+		if(RadialShooter.DEBUG){
+			g.setColor(Color.red);
+			g.drawRect((int) (position.getX()), (int) (position.getY()), (int) (collisionBox.getX()), (int) (collisionBox.getY()));
+			g.setColor(Color.black);
+		}
 	}
 }

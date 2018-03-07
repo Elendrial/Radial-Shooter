@@ -25,7 +25,7 @@ public abstract class BaseEntity {
 	}
 
 	public Rectangle getCollisionRect(){
-		return new Rectangle((int) (position.getX()), (int) (position.getY()), (int) (collisionBox.getX()), (int) (collisionBox.getY()));
+		return Vector.convertToRectangle(position, new Vector(position.getX() + collisionBox.getX(), position.getY() + collisionBox.getY()));
 	}
 	
 }
