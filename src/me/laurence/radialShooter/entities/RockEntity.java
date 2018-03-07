@@ -37,11 +37,12 @@ public class RockEntity extends MovingEntity{
 			if(RadialShooter.DEBUG) System.out.println("hit by " + e);
 			if(e instanceof BulletEntity){
 				this.destroy();
+				stage.player.rocksDestroyed++;
 				return;
 			}
 			
 			if(e instanceof PlayerEntity){
-				// TODO: End of the game.
+				stage.radialShooterInstance.setFinished();
 			}
 			
 		}

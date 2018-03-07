@@ -16,9 +16,11 @@ public class Stage {
 	protected ArrayList<BaseEntity> removedEntities = new ArrayList<BaseEntity>();
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 	public final RadialShooter radialShooterInstance;
+	public final PlayerEntity player;
 	
 	public Stage(RadialShooter parent){
-		addEntity(new PlayerEntity(this));
+		player = new PlayerEntity(this);
+		addEntity(player);
 		this.radialShooterInstance = parent;
 	}
 	
@@ -28,6 +30,23 @@ public class Stage {
 	
 	public void removeEntity(BaseEntity e){
 		removedEntities.add(e);
+	}
+	
+	public void reset(){
+		final Lock r = lock.readLock();
+	    r.lock();
+	    try {
+			entities.clear();
+			addedEntities.clear();
+			removedEntities.clear();
+			
+			player.reset();
+			
+			entities.add(player);
+	    }
+	    finally{
+	    	r.unlock();
+	    }
 	}
 	
 	public void updateOnTick(){

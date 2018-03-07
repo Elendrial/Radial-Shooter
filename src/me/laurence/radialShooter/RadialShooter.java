@@ -52,18 +52,28 @@ public class RadialShooter implements Runnable{
 		}
 	}
 	
-	// RedialShooter Object - setup this way to allow for parallel testing of genetic variants.
+	// RadialShooter Object - setup this way to allow for parallel testing of genetic variants.
 	
 	public Stage stage;
-	public boolean finished;
+	public int state; // 0 == halted, 1 == running, 2 == preparing to halt.
 	
 	public RadialShooter(){
 		stage = new Stage(this);
-		finished = true;
+		state = 0;
 	}
 	
 	public void startRun(){
-		finished = false;
+		state = 1;
+	}
+	
+
+	public void setFinished() {
+		state = 2;
+	}
+	
+	public void reset(){
+		stage.reset();
+		state = 0;
 	}
 
 	public void updateOnTick(){
@@ -103,7 +113,8 @@ public class RadialShooter implements Runnable{
             unprocessed += (now - then) / nsPerTick;
             then = now;
             while(unprocessed >= 1){
-                if(!finished) try{updateOnTick();} catch(Exception e){e.printStackTrace();}
+                if(state == 1) try{updateOnTick();} catch(Exception e){e.printStackTrace();}
+                else if(state == 2) reset();
                 tick++;
                 unprocessed--;
             }

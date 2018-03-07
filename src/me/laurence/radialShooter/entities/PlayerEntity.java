@@ -1,21 +1,23 @@
 package me.laurence.radialShooter.entities;
 
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 
-import me.laurence.radialShooter.IInputUser;
 import me.laurence.radialShooter.RadialShooter;
 import me.laurence.radialShooter.Stage;
-import me.laurence.radialShooter.graphics.InputHandler;
 
-public class PlayerEntity extends BaseEntity implements IInputUser{
+public class PlayerEntity extends BaseEntity{
 	
 	private int rotation, deltaRotation, fireDelay, maxFireDelay;
 	private double xRotOffset, yRotOffset, rotationMultiplier, bulletVelocity;
 	private boolean firing;
+	public int rocksDestroyed;
 	
 	public PlayerEntity(Stage s){
 		super(s);
+		reset();
+	}
+	
+	public void reset(){
 		position.setLocation(RadialShooter.w.width/2, RadialShooter.w.height/2);
 		collisionBox.setLocation(20, 20);
 		
@@ -28,15 +30,14 @@ public class PlayerEntity extends BaseEntity implements IInputUser{
 		bulletVelocity = 5;
 		
 		firing = false;
-		updateRotation();
 		
-		InputHandler.inputListeners.add(this);
+		rocksDestroyed = 0;
+		
+		updateRotation();
 	}
 	
 	@Override
-	public void destroy(){
-		InputHandler.inputListeners.remove(this);
-	}
+	public void destroy(){}
 	
 	@Override
 	public void updateOnTick() {
@@ -79,46 +80,6 @@ public class PlayerEntity extends BaseEntity implements IInputUser{
 	private void updateRotation(){
 		xRotOffset = Math.sin(rotation * Math.PI / 180);
 		yRotOffset = Math.cos(rotation * Math.PI / 180);
-	}
-	
-	public void keyPressed(KeyEvent e){
-		switch(e.getKeyCode()){
-		case KeyEvent.VK_A:
-			deltaRotation = 1;
-			break;
-		case KeyEvent.VK_D:
-			deltaRotation = -1;
-			break;
-		case KeyEvent.VK_LEFT:
-			deltaRotation = 1;
-			break;
-		case KeyEvent.VK_RIGHT:
-			deltaRotation = -1;
-			break;
-		case KeyEvent.VK_SPACE:
-			firing = true;
-			break;
-		}
-	}
-	
-	public void keyReleased(KeyEvent e){
-		switch(e.getKeyCode()){
-		case KeyEvent.VK_A:
-			if(deltaRotation == 1) deltaRotation = 0;
-			break;
-		case KeyEvent.VK_D:
-			if(deltaRotation == -1) deltaRotation = 0;
-			break;
-		case KeyEvent.VK_LEFT:
-			if(deltaRotation == 1) deltaRotation = 0;
-			break;
-		case KeyEvent.VK_RIGHT:
-			if(deltaRotation == -1) deltaRotation = 0;
-			break;
-		case KeyEvent.VK_SPACE:
-			firing = false;
-			break;
-		}
 	}
 	
 }
