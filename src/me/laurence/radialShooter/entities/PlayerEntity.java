@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 
 import me.laurence.radialShooter.IInputUser;
 import me.laurence.radialShooter.RadialShooter;
+import me.laurence.radialShooter.Stage;
 import me.laurence.radialShooter.graphics.InputHandler;
 
 public class PlayerEntity extends BaseEntity implements IInputUser{
@@ -13,8 +14,8 @@ public class PlayerEntity extends BaseEntity implements IInputUser{
 	private double xRotOffset, yRotOffset, rotationMultiplier, bulletVelocity;
 	private boolean firing;
 	
-	public PlayerEntity(){
-		super();
+	public PlayerEntity(Stage s){
+		super(s);
 		position.setLocation(RadialShooter.w.width/2, RadialShooter.w.height/2);
 		collisionBox.setLocation(20, 20);
 		
@@ -53,9 +54,9 @@ public class PlayerEntity extends BaseEntity implements IInputUser{
 	}
 	
 	public void shoot(){
-		BulletEntity e = new BulletEntity(xRotOffset * bulletVelocity, yRotOffset * bulletVelocity);
+		BulletEntity e = new BulletEntity(stage, xRotOffset * bulletVelocity, yRotOffset * bulletVelocity);
 		e.position = position.getLocation();
-		RadialShooter.instance.stage.addEntity(e);
+		stage.addEntity(e);
 	}
 	
 	@Override

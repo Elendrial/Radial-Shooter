@@ -5,12 +5,13 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import me.laurence.radialShooter.RadialShooter;
+import me.laurence.radialShooter.Stage;
 
 public class BulletEntity extends MovingEntity{
 	
-	public BulletEntity(){ super(); }
+	public BulletEntity(Stage s){ super(s); }
 	
-	public BulletEntity(double x, double y){ super(x, y); this.collisionBox.setLocation(x * 2, y * 2);}
+	public BulletEntity(Stage s, double x, double y){ super(s, x, y); this.collisionBox.setLocation(x * 2, y * 2);}
 	
 	@Override
 	public void updateOnTick(){

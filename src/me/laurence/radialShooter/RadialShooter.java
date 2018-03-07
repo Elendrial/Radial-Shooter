@@ -1,5 +1,6 @@
 package me.laurence.radialShooter;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import me.laurence.radialShooter.entities.RockEntity;
@@ -8,7 +9,7 @@ import me.laurence.radialShooter.graphics.Window;
 public class RadialShooter implements Runnable{
 
 	public static Window w;
-	public static RadialShooter instance;
+	public static ArrayList<RadialShooter> instances;
 	public static boolean isRunning;
 	public static int targetTPS = 30;
 	public static Random rand = new Random();
@@ -21,9 +22,12 @@ public class RadialShooter implements Runnable{
 	
 	public static void startGame(){
 		isRunning = true;
+		instances = new ArrayList<RadialShooter>();
+		
 		setupWindow();
 		setupInstance();
 		
+		startInstances();
 		w.start();
 	}
 	
@@ -38,15 +42,28 @@ public class RadialShooter implements Runnable{
 	}
 	
 	public static void setupInstance(){
-		instance = new RadialShooter();
-		new Thread(instance).start();
+		instances.add(new RadialShooter());
+		new Thread(instances.get(instances.size()-1)).start();
+	}
+	
+	public static void startInstances(){
+		for(RadialShooter r : instances){
+			r.startRun();
+		}
 	}
 	
 	// RedialShooter Object - setup this way to allow for parallel testing of genetic variants.
 	
 	public Stage stage;
+	public boolean finished;
+	
 	public RadialShooter(){
-		stage = new Stage();
+		stage = new Stage(this);
+		finished = true;
+	}
+	
+	public void startRun(){
+		finished = false;
 	}
 
 	public void updateOnTick(){
@@ -65,7 +82,7 @@ public class RadialShooter implements Runnable{
 				x = rand.nextInt(w.width-2)+1;
 			}
 			
-			RockEntity e = new RockEntity(new Vector(x,y));
+			RockEntity e = new RockEntity(stage, new Vector(x,y));
 			stage.addEntity(e);
 		}
 	}
@@ -86,7 +103,7 @@ public class RadialShooter implements Runnable{
             unprocessed += (now - then) / nsPerTick;
             then = now;
             while(unprocessed >= 1){
-                try{updateOnTick();} catch(Exception e){e.printStackTrace();}
+                if(!finished) try{updateOnTick();} catch(Exception e){e.printStackTrace();}
                 tick++;
                 unprocessed--;
             }
