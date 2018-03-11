@@ -67,12 +67,22 @@ public class Vector {
 		return new Vector(x/dist, y/dist);
 	}
 	
+	public void rotateRad(double radians, Vector v){
+		double oldX = x, oldY = y;
+		x = Math.cos(radians)*(oldX-v.x) - Math.sin(radians)*(oldY-v.y) + v.x;
+		y = Math.sin(radians)*(oldX-v.x) + Math.cos(radians)*(oldY-v.y) + v.y;
+	}
+	
+	public void rotateDeg(double degrees, Vector v){
+		rotateRad(Math.PI*degrees/180, v);
+	}
+
 	public void rotateRad(double radians) {
-		// TODO
+		rotateRad(radians, new Vector(0,0));
 	}
 	
 	public void rotateDeg(double degrees) {
-		rotateRad(Math.PI/180);
+		rotateRad(Math.PI*degrees/180);
 	}
 	
 	public Vector getLocation() {
