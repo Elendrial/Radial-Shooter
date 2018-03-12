@@ -1,6 +1,8 @@
 package me.laurence.radialShooter.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Arrays;
 
 import me.laurence.radialShooter.RadialShooter;
 import me.laurence.radialShooter.Stage;
@@ -11,7 +13,7 @@ public class PlayerEntity extends BaseEntity{
 	private int rotation, deltaRotation, fireDelay, maxFireDelay;
 	private double rotationMultiplier, bulletVelocity;
 	private boolean firing;
-	public int rocksDestroyed;
+	public int rocksDestroyed, health;
 	public Vector rotOffset;
 	
 	public PlayerEntity(Stage s){
@@ -23,9 +25,8 @@ public class PlayerEntity extends BaseEntity{
 		position.setLocation(RadialShooter.w.width/2, RadialShooter.w.height/2);
 		collisionBox.setLocation(20, 20);
 		
-		rotOffset = new Vector(1,0);
-		
-		rotation = 180;
+		rotOffset = new Vector(1, 0); // Right is set as rotation = 0;
+		rotation = 0;
 		deltaRotation = 0;
 		rotationMultiplier = 4;
 		
@@ -36,6 +37,11 @@ public class PlayerEntity extends BaseEntity{
 		firing = false;
 		
 		rocksDestroyed = 0;
+		health = 5;
+		
+		setRotation(0);
+		
+		getInputs(); // just initialises last outputs and stops a load of errors being printed.
 	}
 	
 	@Override
@@ -52,6 +58,8 @@ public class PlayerEntity extends BaseEntity{
 			}
 		}
 		
+		this.getInputs();
+		
 		// Turning TODO: revert back to how it was before
 		addToRotation((int) (1 * rotationMultiplier));
 	}
@@ -67,15 +75,46 @@ public class PlayerEntity extends BaseEntity{
 		g.drawArc((int) (position.getX() - collisionBox.getX()/2), (int) (position.getY()-collisionBox.getY()/2), (int) collisionBox.getX(), (int) collisionBox.getY(), 0, 360);
 		g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + rotOffset.getX() * collisionBox.getX()/2), (int) (position.getY() + rotOffset.getY() * collisionBox.getY()/2));
 		
-		// TODO: Remove temp or at least put it under debug
-		int dist = 200;
-		g.drawArc((int) (position.getX() - dist/2), (int) (position.getY()-dist/2), (int) dist, (int) dist, 0, 360);
-		g.drawArc((int) (position.getX() - dist), (int) (position.getY()-dist), (int) dist*2, (int) dist*2, 0, 360);
-		g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + rotOffset.getX() * 400), (int) (position.getY() + rotOffset.getY() * 400));
+		if(RadialShooter.DEBUG) {
+		
+			// Draw the circles
+			g.drawArc((int) (position.getX() - rSegDist), (int) (position.getY()-rSegDist), (int) rSegDist*2, (int) rSegDist*2, 0, 360);
+			g.drawArc((int) (position.getX() - rSegDist*2), (int) (position.getY()-rSegDist*2), (int) rSegDist*4, (int) rSegDist*4, 0, 360);
+			
+			// Draw lines & strings with the value of each section.
+			Vector v = rotOffset.getLocation();
+			for(int i = 0; i < angleSegments; i++) {
+				
+				v.rotateDeg(180/(double)angleSegments);
+				
+				g.setColor(Color.BLUE);
+				g.drawString(i + "", (int)(position.getX() + v.getX() * 350), (int)(position.getY() + v.getY() * 350));
+				g.setColor(Color.BLACK);
+				
+				for(int j = 0; j < radialSegments; j++) {
+					try {
+						g.drawString("" + lastOutputs[i * radialSegments + j], (int)(position.getX() + v.getX() * rSegDist * (j + 0.5)), (int)(position.getY() + v.getY() * rSegDist * (j+0.5)));
+					}
+					catch(Exception e) {
+						System.err.println("Failed to get " + (i * radialSegments + j) + " :: " + i + " * " + radialSegments + " + " + j);
+						e.printStackTrace();
+					}
+				}
+				
+				v.rotateDeg(180/(double)angleSegments);
+				g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + v.getX() * 500), (int) (position.getY() + v.getY() * 500));
+			}
+			
+			// Draw direction facing.
+			g.setColor(Color.RED);
+			g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + rotOffset.getX() * 500), (int) (position.getY() + rotOffset.getY() * 500));
+			g.setColor(Color.BLACK);
+		}
 	}
 	
 	public void setRotation(int rotation){
-		rotOffset.rotateDeg(this.rotation - rotation);
+		rotation = rotation < 0 ? 360 - rotation : 0; // Probably not needed, but helps ensure it's always 0 <= r < 360
+		rotOffset.rotateDeg(rotation - this.rotation);
 		this.rotation = rotation;
 	}
 	
@@ -85,12 +124,33 @@ public class PlayerEntity extends BaseEntity{
 		rotation %= 360;
 	}
 	
-	
+	private int angleSegments = 8, radialSegments = 3, rSegDist = 100;
+	private float[] lastOutputs;
 	private float[] getInputs(){
-		float[] output = new float[25];
+		float[] output = new float[angleSegments * radialSegments + 1];
+		Arrays.fill(output, 0f);
 		
-		// Don't test areas, test entities!
-		
+		Vector pos = new Vector();
+		int count, dist;
+		for(BaseEntity e : stage.getEntities()) {
+			if(e instanceof PlayerEntity) continue; // Arguably wrapping the entire thing would be better, but I cba
+			pos.setLocation(e.position);
+			pos.translate(position.negated());
+			pos.rotateDeg(-rotation);
+			
+			if(Math.round(pos.getLocation().getX()) == 0) output[output.length-1] += 1; // Checks along line of sight.
+			else {
+				count = 0;
+				while((Math.atan(pos.getX()/pos.getY()) * 180/Math.PI < 360/angleSegments || !(pos.getX() >= 0 && pos.getY() >= 0))  && count < angleSegments-1) {
+					pos.rotateDeg(-360/(double)angleSegments);
+					count++;
+				}
+				dist = (int)(pos.distance(Vector.ORIGIN)/rSegDist);
+				dist = dist >= radialSegments ? radialSegments-1 : dist;
+				output[count * 3 + dist] += 1;
+			}
+		}
+		lastOutputs = output;
 		return output;
 	}
 }

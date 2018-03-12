@@ -42,7 +42,9 @@ public class RockEntity extends MovingEntity{
 			}
 			
 			if(e instanceof PlayerEntity){
-				stage.radialShooterInstance.setFinished();
+				((PlayerEntity) e).health--;
+				if(((PlayerEntity) e).health == 0)	stage.radialShooterInstance.setFinished();
+				this.destroy();
 			}
 			
 		}

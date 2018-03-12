@@ -12,8 +12,8 @@ import me.laurence.radialShooter.entities.PlayerEntity;
 public class Stage {
 	
 	protected ArrayList<BaseEntity> entities = new ArrayList<BaseEntity>();
-	protected ArrayList<BaseEntity> addedEntities = new ArrayList<BaseEntity>();
-	protected ArrayList<BaseEntity> removedEntities = new ArrayList<BaseEntity>();
+	private ArrayList<BaseEntity> addedEntities = new ArrayList<BaseEntity>();
+	private ArrayList<BaseEntity> removedEntities = new ArrayList<BaseEntity>();
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 	public final RadialShooter radialShooterInstance;
 	public final PlayerEntity player;
@@ -88,6 +88,10 @@ public class Stage {
 		}
 		
 		return collidingWith;
+	}
+
+	public ArrayList<BaseEntity> getEntities() {
+		return entities;
 	}
 	
 }

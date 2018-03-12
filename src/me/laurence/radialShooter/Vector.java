@@ -4,6 +4,8 @@ import java.awt.Rectangle;
 
 // Basically an implementation of Point but with doubles instead of ints with minor added functionality.
 public class Vector {
+	public final static Vector ORIGIN = new Vector(0,0);
+	
 	private double x, y;
 	
 	public Vector() {
@@ -63,26 +65,31 @@ public class Vector {
 	}
 	
 	public Vector getUnitVector() {
-		double dist = distance(new Vector(0,0));
+		double dist = distance(ORIGIN);
 		return new Vector(x/dist, y/dist);
 	}
 	
-	public void rotateRad(double radians, Vector v){
+	public boolean isUnitVector() {
+		return distance(ORIGIN) == 1;
+	}
+	
+	public Vector rotateRad(double radians, Vector v){
 		double oldX = x, oldY = y;
 		x = Math.cos(radians)*(oldX-v.x) - Math.sin(radians)*(oldY-v.y) + v.x;
 		y = Math.sin(radians)*(oldX-v.x) + Math.cos(radians)*(oldY-v.y) + v.y;
+		return this;
 	}
 	
-	public void rotateDeg(double degrees, Vector v){
-		rotateRad(Math.PI*degrees/180, v);
+	public Vector rotateDeg(double degrees, Vector v){
+		return rotateRad(Math.PI*degrees/180, v);
 	}
 
-	public void rotateRad(double radians) {
-		rotateRad(radians, new Vector(0,0));
+	public Vector rotateRad(double radians) {
+		return rotateRad(radians, new Vector(0,0));
 	}
 	
-	public void rotateDeg(double degrees) {
-		rotateRad(Math.PI*degrees/180);
+	public Vector rotateDeg(double degrees) {
+		return rotateRad(Math.PI*degrees/180);
 	}
 	
 	public Vector getLocation() {
@@ -91,6 +98,10 @@ public class Vector {
 	
 	public String toString() {
 		return "(" + x + ", " + y + ")";
+	}
+	
+	public Vector negated() {
+		return new Vector(-x,-y);
 	}
 	
 	public static Rectangle convertToRectangle(Vector a, Vector b){
