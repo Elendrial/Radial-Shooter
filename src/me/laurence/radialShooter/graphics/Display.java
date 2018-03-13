@@ -18,4 +18,14 @@ public class Display extends Canvas{
 		try{RadialShooter.instances.get(viewingInstance).stage.render(g);} catch(Exception e){e.printStackTrace();}
 	}
 	
+	public void nextInstance(){
+		viewingInstance++;
+		viewingInstance %= RadialShooter.genAlg.genSettings.childrenPerGeneration;
+	}
+	
+	public void prevInstance() {
+		viewingInstance--;
+		viewingInstance %= RadialShooter.genAlg.genSettings.childrenPerGeneration;	
+	}
+	
 }

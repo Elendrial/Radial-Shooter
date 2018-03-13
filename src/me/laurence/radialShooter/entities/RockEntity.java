@@ -15,7 +15,7 @@ public class RockEntity extends MovingEntity{
 		this.collisionBox.setLocation(15, 15);
 		position.setLocation(p.getX(), p.getY());
 		setVelocity(1.7);
-		if(RadialShooter.DEBUG) System.out.println("Spawned rock at: " + position.getX() + ", " + position.getY() + "\t moving at: " + velocity.getX() + ", " + velocity.getY());
+		if(RadialShooter.printDEBUG) System.out.println("Spawned rock at: " + position.getX() + ", " + position.getY() + "\t moving at: " + velocity.getX() + ", " + velocity.getY());
 	}
 	
 	public RockEntity(Stage s, Vector p, int velocity){
@@ -34,7 +34,7 @@ public class RockEntity extends MovingEntity{
 		super.updateOnTick();
 		ArrayList<BaseEntity> entities = stage.getCollidingEntities(this);
 		for(BaseEntity e : entities){
-			if(RadialShooter.DEBUG) System.out.println("hit by " + e);
+			if(RadialShooter.printDEBUG) System.out.println("hit by " + e);
 			if(e instanceof BulletEntity){
 				this.destroy();
 				stage.player.rocksDestroyed++;
@@ -54,7 +54,7 @@ public class RockEntity extends MovingEntity{
 	public void render(Graphics g) {
 		g.drawArc((int) (position.getX()), (int) (position.getY()), (int) (collisionBox.getX()), (int) (collisionBox.getY()), 0, 360);
 		
-		if(RadialShooter.DEBUG){
+		if(RadialShooter.printDEBUG){
 			g.setColor(Color.red);
 			g.drawRect((int) (position.getX()), (int) (position.getY()), (int) (collisionBox.getX()), (int) (collisionBox.getY()));
 			g.setColor(Color.black);

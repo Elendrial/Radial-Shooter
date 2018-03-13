@@ -12,12 +12,13 @@ public class RadialShooter implements Runnable{
 
 	public static Window w;
 	public static ArtificialIntelligence ai;
+	public static GeneticAlgB genAlg;
 	public static ArrayList<RadialShooter> instances;
 	public static Random rand = new Random();
 	public static boolean isRunning;
 	public static int targetTPS = 30;
 	
-	public static boolean DEBUG = false;
+	public static boolean renderDEBUG = false, printDEBUG;
 	
 	public static void main(String[] args) {
 		startGame();
@@ -29,15 +30,43 @@ public class RadialShooter implements Runnable{
 		
 		setupWindow();
 		setupAI();
-		setupInstance();
+		setupInstances(genAlg.genSettings.childrenPerGeneration);
 		
 		startInstances();
 		w.start();
+		
+		while(isRunning) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			boolean finished = true;
+			for(RadialShooter s : instances) {
+				if(s.state != 0) {
+					finished = false;
+					break;
+				}
+			}
+			
+			if(finished) {
+				System.out.println("iterating");
+				ai.iterate();
+				System.out.println("iterated");
+				if(genAlg.children.size()> instances.size()) 
+					setupInstances(genAlg.children.size()-instances.size());
+				System.out.println("starting..");
+				startInstances();
+			}
+			
+		}
 	}
 	
 	public static void stopGame(){
 		isRunning = false;
 		w.stop();
+		ai.saveNetwork("savedNets");
 	}
 	
 	public static void setupWindow(){
@@ -48,7 +77,7 @@ public class RadialShooter implements Runnable{
 	public static void setupAI(){ // Mostly nabbed from my 2048 clone.
 		ai = new ArtificialIntelligence();
 		
-		GeneticAlgB genAlg = new GeneticAlgB();
+		genAlg = new GeneticAlgB();
 		genAlg.genSettings.childrenPerGeneration = 200;
 		genAlg.genSettings.additionalTopChildrenKept = 20;
 		genAlg.genSettings.mutationChance = 0.02f;
@@ -59,10 +88,11 @@ public class RadialShooter implements Runnable{
 		genAlg.genSettingsB.lowestXPotentiallyKept = 80;
 		genAlg.genSettingsB.additionalToMix = 20;
 		
+		
 		// TODO: Tweak these
-		ai.settings.neuralSettings.inputs = 17; // needs to be the grid area +1
-		ai.settings.neuralSettings.nodesInHiddenLayers = new int[]{32, 8};
-		ai.settings.neuralSettings.outputs = new String[]{"r","l","s"};
+		ai.settings.neuralSettings.inputs = 25; // Check the PlayerEntity class for what this number should be.
+		ai.settings.neuralSettings.nodesInHiddenLayers = new int[]{10};
+		ai.settings.neuralSettings.outputs = new String[]{"l","r","s"};
 		ai.settings.neuralSettings.cutoffThreshhold = 0.6f;
 		ai.settings.neuralSettings.outputsAsFloats = true;
 		
@@ -75,9 +105,12 @@ public class RadialShooter implements Runnable{
 		ai.initialSetup();
 	}
 	
-	public static void setupInstance(){
-		instances.add(new RadialShooter(instances.size()));
-		new Thread(instances.get(instances.size()-1)).start();
+	public static void setupInstances(int number){
+		while(number > 0) {
+			instances.add(new RadialShooter(instances.size()));
+			new Thread(instances.get(instances.size()-1)).start();
+			number--;
+		}
 	}
 	
 	public static void startInstances(){
@@ -105,6 +138,7 @@ public class RadialShooter implements Runnable{
 
 	public void setFinished() {
 		state = 2;
+		genAlg.setFitness(state, stage.player.rocksDestroyed * 10);
 	}
 	
 	public void reset(){
@@ -133,6 +167,8 @@ public class RadialShooter implements Runnable{
 		}
 	}
 	
+	
+	public int TPS = 0;
 	@Override
     public void run() {
         int tick = 0;
@@ -164,7 +200,8 @@ public class RadialShooter implements Runnable{
 
             // If the current time is 1 second greater than the last time we printed
             if(System.currentTimeMillis() - fpsTimer >= 1000){
-                System.out.printf("FPS: %d, TPS: %d%n", w.FPS, tick);
+            	if(printDEBUG) System.out.printf("FPS: %d, TPS: %d%n", w.FPS, tick);
+            	TPS = tick;
                 tick = 0;
                 fpsTimer += 1000;
             }

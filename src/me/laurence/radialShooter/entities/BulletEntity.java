@@ -25,7 +25,7 @@ public class BulletEntity extends MovingEntity{
 	public void render(Graphics g) {
 		g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + collisionBox.getX()), (int) (position.getY() + collisionBox.getY()));
 		
-		if(RadialShooter.DEBUG){
+		if(RadialShooter.renderDEBUG){
 			g.setColor(Color.red);
 			g.drawRect((int) (position.getX()), (int) (position.getY()), (int) (collisionBox.getX()), (int) (collisionBox.getY()));
 			Rectangle r = this.getCollisionRect();

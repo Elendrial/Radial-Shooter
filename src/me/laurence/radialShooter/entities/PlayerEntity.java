@@ -50,6 +50,10 @@ public class PlayerEntity extends BaseEntity{
 	@Override
 	public void updateOnTick() {
 		// Shooting
+		float[] input = RadialShooter.ai.getOutputsAsFloat(getInputs(), stage.radialShooterInstance.index);
+		// 0: l, 1 : r, 2 : s
+		firing = input[2] > RadialShooter.ai.settings.neuralSettings.cutoffThreshhold;
+		
 		if(fireDelay > 0) fireDelay--;
 		if(firing){
 			if(fireDelay == 0){
@@ -58,10 +62,11 @@ public class PlayerEntity extends BaseEntity{
 			}
 		}
 		
-		this.getInputs();
+		if(input[0] > input[1] && input[0] > RadialShooter.ai.settings.neuralSettings.cutoffThreshhold) deltaRotation = -1;
+		else if(input[1] > RadialShooter.ai.settings.neuralSettings.cutoffThreshhold) deltaRotation = 1;
+		else deltaRotation = 0;
 		
-		// Turning TODO: revert back to how it was before
-		addToRotation((int) (1 * rotationMultiplier));
+		addToRotation((int) (deltaRotation * rotationMultiplier));
 	}
 	
 	public void shoot(){
@@ -75,7 +80,7 @@ public class PlayerEntity extends BaseEntity{
 		g.drawArc((int) (position.getX() - collisionBox.getX()/2), (int) (position.getY()-collisionBox.getY()/2), (int) collisionBox.getX(), (int) collisionBox.getY(), 0, 360);
 		g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + rotOffset.getX() * collisionBox.getX()/2), (int) (position.getY() + rotOffset.getY() * collisionBox.getY()/2));
 		
-		if(RadialShooter.DEBUG) {
+		if(RadialShooter.renderDEBUG) {
 		
 			// Draw the circles
 			g.drawArc((int) (position.getX() - rSegDist), (int) (position.getY()-rSegDist), (int) rSegDist*2, (int) rSegDist*2, 0, 360);

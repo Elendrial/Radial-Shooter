@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import me.laurence.radialShooter.IInputUser;
+import me.laurence.radialShooter.RadialShooter;
 
 public class InputHandler implements KeyListener{
 
@@ -14,6 +15,25 @@ public class InputHandler implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		inputListeners.forEach(i -> i.keyPressed(arg0));
+		
+		switch(arg0.getKeyCode()) {
+		case KeyEvent.VK_N:
+			RadialShooter.w.display.nextInstance();
+			break;
+			
+		case KeyEvent.VK_B:
+			RadialShooter.w.display.prevInstance();
+			break;
+		
+		case KeyEvent.VK_S:
+			RadialShooter.stopGame();
+			break;
+			
+		case KeyEvent.VK_D:
+			RadialShooter.renderDEBUG = !RadialShooter.renderDEBUG;
+			break;
+		}
+		
 	}
 
 	@Override
