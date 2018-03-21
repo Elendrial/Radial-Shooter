@@ -16,9 +16,9 @@ public class RadialShooter implements Runnable{
 	public static ArrayList<RadialShooter> instances;
 	public static Random rand = new Random();
 	public static boolean isRunning;
-	public static int targetTPS = 30;
+	public static int targetTPS = 120;
 	
-	public static boolean renderDEBUG = false, printDEBUG;
+	public static boolean renderDEBUG = false, printDEBUG = false;
 	
 	public static void main(String[] args) {
 		startGame();
@@ -138,7 +138,7 @@ public class RadialShooter implements Runnable{
 
 	public void setFinished() {
 		state = 2;
-		genAlg.setFitness(state, stage.player.rocksDestroyed * 10);
+		genAlg.setFitness(index, stage.player.rocksDestroyed * 10 + 0.1f); // The +0.1 is so that even ones which hit nothing can be potential parents.
 	}
 	
 	public void reset(){
