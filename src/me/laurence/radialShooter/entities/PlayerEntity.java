@@ -37,7 +37,7 @@ public class PlayerEntity extends BaseEntity{
 		firing = false;
 		
 		rocksDestroyed = 0;
-		health = 5;
+		health = 10;
 		
 		setRotation(0);
 		

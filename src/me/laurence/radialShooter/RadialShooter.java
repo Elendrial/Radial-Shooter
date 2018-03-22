@@ -16,7 +16,7 @@ public class RadialShooter implements Runnable{
 	public static ArrayList<RadialShooter> instances;
 	public static Random rand = new Random();
 	public static boolean isRunning;
-	public static int targetTPS = 120;
+	public static int targetTPS = 500;
 	
 	public static boolean renderDEBUG = false, printDEBUG = false;
 	
@@ -51,12 +51,9 @@ public class RadialShooter implements Runnable{
 			}
 			
 			if(finished) {
-				System.out.println("iterating");
 				ai.iterate();
-				System.out.println("iterated");
 				if(genAlg.children.size()> instances.size()) 
 					setupInstances(genAlg.children.size()-instances.size());
-				System.out.println("starting..");
 				startInstances();
 			}
 			
@@ -91,7 +88,7 @@ public class RadialShooter implements Runnable{
 		
 		// TODO: Tweak these
 		ai.settings.neuralSettings.inputs = 25; // Check the PlayerEntity class for what this number should be.
-		ai.settings.neuralSettings.nodesInHiddenLayers = new int[]{10};
+		ai.settings.neuralSettings.nodesInHiddenLayers = new int[]{20};
 		ai.settings.neuralSettings.outputs = new String[]{"l","r","s"};
 		ai.settings.neuralSettings.cutoffThreshhold = 0.6f;
 		ai.settings.neuralSettings.outputsAsFloats = true;
@@ -150,7 +147,7 @@ public class RadialShooter implements Runnable{
 		stage.updateOnTick();
 		
 		// Spawning rocks:
-		if(rand.nextFloat() < 0.01){ // 0.01 every tick : avg of 0.3 every second
+		if(rand.nextFloat() < 0.015){ // 0.015 every tick : avg of 0.45 every second
 			boolean side = rand.nextBoolean();
 			int x, y;
 			if(side) {
@@ -174,8 +171,7 @@ public class RadialShooter implements Runnable{
         int tick = 0;
         
         double fpsTimer = System.currentTimeMillis();
-        double secondsPerTick = 1D / targetTPS;
-        double nsPerTick = secondsPerTick * 1000000000D;
+        double nsPerTick = (1D / targetTPS) * 1000000000D;
         double then = System.nanoTime();
         double now;
         double unprocessed = 0;
@@ -186,7 +182,10 @@ public class RadialShooter implements Runnable{
             then = now;
             while(unprocessed >= 1){
                 if(state == 1) try{updateOnTick();} catch(Exception e){e.printStackTrace();}
-                else if(state == 2) reset();
+                else if(state == 2) {
+                	reset();
+                	nsPerTick = (1D / targetTPS) * 1000000000D;
+                }
                 tick++;
                 unprocessed--;
             }
