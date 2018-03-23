@@ -74,7 +74,6 @@ public class RadialShooter implements Runnable{
 	public static void setupAI(){ // Mostly nabbed from my 2048 clone.
 		ai = new ArtificialIntelligence();
 		
-		// TODO: Tweak these
 		genAlg = new GeneticAlgB();
 		genAlg.genSettings.childrenPerGeneration = 250;
 		genAlg.genSettings.additionalTopChildrenKept = 40;
@@ -137,6 +136,7 @@ public class RadialShooter implements Runnable{
 	public void setFinished() {
 		state = 2;
 		genAlg.setFitness(index, stage.player.rocksDestroyed * 10 + 0.1f); // The +0.1 is so that even ones which hit nothing can be potential parents.
+		if(w.display.autoSwitch && w.display.viewingInstance == index) w.display.findNextRunning();
 	}
 	
 	public void reset(){

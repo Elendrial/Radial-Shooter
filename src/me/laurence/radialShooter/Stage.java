@@ -17,6 +17,7 @@ public class Stage {
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 	public final RadialShooter radialShooterInstance;
 	public final PlayerEntity player;
+	private int score;
 	
 	public Stage(RadialShooter parent){
 		player = new PlayerEntity(this);
@@ -54,6 +55,7 @@ public class Stage {
 	    w.lock();
 	    try{
 			entities.forEach(e -> e.updateOnTick());
+			score = player.rocksDestroyed * 10;
 			
 			entities.addAll(addedEntities);
 			entities.removeAll(removedEntities);
@@ -71,7 +73,7 @@ public class Stage {
 		final Lock r = lock.readLock();
 	    r.lock();
 	    try {
-	    	g.drawString("i: " + radialShooterInstance.index + "      TPS: " + radialShooterInstance.TPS + "      Score: " + (player.rocksDestroyed * 10) + "      Health: " + player.health + "/20", 5, RadialShooter.w.height - 10);
+	    	g.drawString("TPS: " + radialShooterInstance.TPS + "      Score: " + score + "      Health: " + player.health + "/20", 5, RadialShooter.w.height - 7);
 	    	entities.forEach(e -> e.render(g));
 	    }
 	    finally{

@@ -41,6 +41,11 @@ public class InputHandler implements KeyListener{
 			int t = Integer.parseInt(s);
 			RadialShooter.targetTPS = t > 0 ? t : RadialShooter.targetTPS;
 			System.out.println("Target TPS changed to " + RadialShooter.targetTPS + " for next generation.");
+			break;
+		
+		case KeyEvent.VK_A:
+			RadialShooter.w.display.autoSwitch = !RadialShooter.w.display.autoSwitch;
+			break;
 		}
 		
 	}
