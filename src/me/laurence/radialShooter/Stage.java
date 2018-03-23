@@ -68,10 +68,10 @@ public class Stage {
 	
 	
 	public void render(Graphics g){
-		g.drawString("i:" + radialShooterInstance.index + "      TPS:" + radialShooterInstance.TPS + "", 5, RadialShooter.w.height - 10);
 		final Lock r = lock.readLock();
 	    r.lock();
 	    try {
+	    	g.drawString("i: " + radialShooterInstance.index + "      TPS: " + radialShooterInstance.TPS + "      Score: " + (player.rocksDestroyed * 10) + "      Health: " + player.health + "/20", 5, RadialShooter.w.height - 10);
 	    	entities.forEach(e -> e.render(g));
 	    }
 	    finally{

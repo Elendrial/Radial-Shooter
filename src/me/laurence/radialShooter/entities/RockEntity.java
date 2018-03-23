@@ -1,6 +1,5 @@
 package me.laurence.radialShooter.entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -54,10 +53,8 @@ public class RockEntity extends MovingEntity{
 	public void render(Graphics g) {
 		g.drawArc((int) (position.getX()), (int) (position.getY()), (int) (collisionBox.getX()), (int) (collisionBox.getY()), 0, 360);
 		
-		if(RadialShooter.printDEBUG){
-			g.setColor(Color.red);
-			g.drawRect((int) (position.getX()), (int) (position.getY()), (int) (collisionBox.getX()), (int) (collisionBox.getY()));
-			g.setColor(Color.black);
+		if(RadialShooter.renderDEBUG){
+			this.drawCollisionRect(g);
 		}
 	}
 }

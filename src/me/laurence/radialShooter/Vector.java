@@ -112,4 +112,10 @@ public class Vector {
 		
 		return new Rectangle((int) x1, (int) y1, (int) (x2-x1), (int) (y2-y1));
 	}
+
+	public Vector scale(double d) {
+		x *= d;
+		y *= d;
+		return this;
+	}
 }

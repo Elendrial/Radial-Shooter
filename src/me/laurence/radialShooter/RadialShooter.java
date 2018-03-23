@@ -16,7 +16,7 @@ public class RadialShooter implements Runnable{
 	public static ArrayList<RadialShooter> instances;
 	public static Random rand = new Random();
 	public static boolean isRunning;
-	public static int targetTPS = 500;
+	public static int targetTPS = 120;
 	
 	public static boolean renderDEBUG = false, printDEBUG = false;
 	
@@ -74,19 +74,20 @@ public class RadialShooter implements Runnable{
 	public static void setupAI(){ // Mostly nabbed from my 2048 clone.
 		ai = new ArtificialIntelligence();
 		
+		// TODO: Tweak these
 		genAlg = new GeneticAlgB();
-		genAlg.genSettings.childrenPerGeneration = 200;
-		genAlg.genSettings.additionalTopChildrenKept = 20;
+		genAlg.genSettings.childrenPerGeneration = 250;
+		genAlg.genSettings.additionalTopChildrenKept = 40;
 		genAlg.genSettings.mutationChance = 0.02f;
-		genAlg.genSettings.mixTop = 30;
+		genAlg.genSettings.mixTop = 100;
 		genAlg.genSettings.insureDifferent = true;
 		
-		genAlg.genSettingsB.additionalRandKept = 20;
-		genAlg.genSettingsB.lowestXPotentiallyKept = 80;
+		genAlg.genSettingsB.additionalRandKept = 15;
+		genAlg.genSettingsB.lowestXPotentiallyKept = 100;
 		genAlg.genSettingsB.additionalToMix = 20;
-		
-		
-		// TODO: Tweak these
+		genAlg.genSettingsB.heavyMutateAmount = 0.4f;
+		genAlg.genSettingsB.heavyMutateRate = 15;
+				
 		ai.settings.neuralSettings.inputs = 25; // Check the PlayerEntity class for what this number should be.
 		ai.settings.neuralSettings.nodesInHiddenLayers = new int[]{20};
 		ai.settings.neuralSettings.outputs = new String[]{"l","r","s"};
@@ -143,25 +144,41 @@ public class RadialShooter implements Runnable{
 		state = 0;
 	}
 
+	public boolean randSpawning = false;
+	public float spawnRate = 0.015f;
+	private float counter = 0f;
 	public void updateOnTick(){
 		stage.updateOnTick();
 		
 		// Spawning rocks:
-		if(rand.nextFloat() < 0.015){ // 0.015 every tick : avg of 0.45 every second
-			boolean side = rand.nextBoolean();
-			int x, y;
-			if(side) {
-				x = rand.nextBoolean() ? 1 : w.width-1;
-				y = rand.nextInt(w.height-2)+1;
+		if(randSpawning) {
+			if(rand.nextFloat() < spawnRate){ // 0.015 every tick : avg of 0.45 every second
+				spawnRock();
 			}
-			else {
-				y = rand.nextBoolean() ? 1 : w.height-1;
-				x = rand.nextInt(w.width-2)+1;
-			}
-			
-			RockEntity e = new RockEntity(stage, new Vector(x,y));
-			stage.addEntity(e);
 		}
+		else {
+			counter+= spawnRate;
+			if(counter >= 1) {
+				counter -= 1;
+				spawnRock();
+			}
+		}
+	}
+	
+	public void spawnRock() {
+		boolean side = rand.nextBoolean();
+		int x, y;
+		if(side) {
+			x = rand.nextBoolean() ? 1 : w.width-1;
+			y = rand.nextInt(w.height-2)+1;
+		}
+		else {
+			y = rand.nextBoolean() ? 1 : w.height-1;
+			x = rand.nextInt(w.width-2)+1;
+		}
+		
+		RockEntity e = new RockEntity(stage, new Vector(x,y));
+		stage.addEntity(e);
 	}
 	
 	

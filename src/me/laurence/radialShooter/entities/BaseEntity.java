@@ -1,5 +1,6 @@
 package me.laurence.radialShooter.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -28,6 +29,14 @@ public abstract class BaseEntity {
 
 	public Rectangle getCollisionRect(){
 		return Vector.convertToRectangle(position, new Vector(position.getX() + collisionBox.getX(), position.getY() + collisionBox.getY()));
+	}
+	
+	public void drawCollisionRect(Graphics g) {
+		Color c = g.getColor();
+		g.setColor(Color.RED);
+		Rectangle r = this.getCollisionRect();
+		g.drawRect(r.x, r.y, r.width, r.height);
+		g.setColor(c);
 	}
 	
 }

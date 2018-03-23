@@ -2,7 +2,6 @@ package me.laurence.radialShooter.entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 
 import me.laurence.radialShooter.RadialShooter;
 import me.laurence.radialShooter.Stage;
@@ -28,8 +27,7 @@ public class BulletEntity extends MovingEntity{
 		if(RadialShooter.renderDEBUG){
 			g.setColor(Color.red);
 			g.drawRect((int) (position.getX()), (int) (position.getY()), (int) (collisionBox.getX()), (int) (collisionBox.getY()));
-			Rectangle r = this.getCollisionRect();
-			g.drawRect(r.x, r.y, r.width, r.height);
+			this.drawCollisionRect(g);
 			g.drawString(collisionBox.toString(), (int) position.getX(), (int) position.getY());
 			g.setColor(Color.black);
 		}

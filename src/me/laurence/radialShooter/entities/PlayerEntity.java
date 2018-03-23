@@ -2,6 +2,7 @@ package me.laurence.radialShooter.entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.Arrays;
 
 import me.laurence.radialShooter.RadialShooter;
@@ -37,7 +38,7 @@ public class PlayerEntity extends BaseEntity{
 		firing = false;
 		
 		rocksDestroyed = 0;
-		health = 10;
+		health = 20;
 		
 		setRotation(0);
 		
@@ -113,6 +114,8 @@ public class PlayerEntity extends BaseEntity{
 			// Draw direction facing.
 			g.setColor(Color.RED);
 			g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + rotOffset.getX() * 500), (int) (position.getY() + rotOffset.getY() * 500));
+			// Draw Collision Box
+			this.drawCollisionRect(g);
 			g.setColor(Color.BLACK);
 		}
 	}
@@ -138,8 +141,9 @@ public class PlayerEntity extends BaseEntity{
 		Vector pos = new Vector();
 		int count, dist;
 		for(BaseEntity e : stage.getEntities()) {
-			if(e instanceof PlayerEntity) continue; // Arguably wrapping the entire thing would be better, but I cba
+			if(e instanceof PlayerEntity || e instanceof BulletEntity) continue; // Arguably wrapping the entire thing would be better, but I cba
 			pos.setLocation(e.position);
+			pos.translate(e.collisionBox.getLocation().scale(0.5)); // Move pos from corner of entity to centre
 			pos.translate(position.negated());
 			pos.rotateDeg(-rotation);
 			
@@ -157,5 +161,10 @@ public class PlayerEntity extends BaseEntity{
 		}
 		lastOutputs = output;
 		return output;
+	}
+	
+	@Override
+	public Rectangle getCollisionRect(){
+		return Vector.convertToRectangle(new Vector(position.getX() - collisionBox.getX()/2, position.getY() - collisionBox.getY()/2), new Vector(position.getX() + collisionBox.getX()/2, position.getY() + collisionBox.getY()/2));
 	}
 }
