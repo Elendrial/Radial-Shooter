@@ -35,6 +35,10 @@ public class InputHandler implements KeyListener{
 			RadialShooter.renderDEBUG = !RadialShooter.renderDEBUG;
 			break;
 			
+		case KeyEvent.VK_P:
+			RadialShooter.printDEBUG = !RadialShooter.printDEBUG;
+			break;
+			
 		case KeyEvent.VK_T:
 			String s = JOptionPane.showInputDialog("New Tickrate?");
 			if(s == null || s.equals(""))	s = RadialShooter.targetTPS + "";
@@ -45,6 +49,7 @@ public class InputHandler implements KeyListener{
 		
 		case KeyEvent.VK_A:
 			RadialShooter.w.display.autoSwitch = !RadialShooter.w.display.autoSwitch;
+			if(RadialShooter.w.display.autoSwitch) RadialShooter.w.display.findNextRunning();
 			break;
 		}
 		

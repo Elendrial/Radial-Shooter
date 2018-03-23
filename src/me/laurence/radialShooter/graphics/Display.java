@@ -16,7 +16,7 @@ public class Display extends Canvas{
 	}
 	
 	public void render(Graphics g){
-		g.drawString("i: " + viewingInstance +  "      Gen: " + RadialShooter.genAlg.generation +  "      Auto: " + autoSwitch, 10, RadialShooter.w.height - 25);
+		g.drawString("FPS: " + RadialShooter.w.FPS + "     i: " + viewingInstance +  "     Gen: " + RadialShooter.genAlg.generation +  "     Auto: " + autoSwitch, 5, RadialShooter.w.height - 25);
 		try{RadialShooter.instances.get(viewingInstance).stage.render(g);} catch(Exception e){e.printStackTrace();}
 	}
 	

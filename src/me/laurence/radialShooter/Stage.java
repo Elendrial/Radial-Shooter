@@ -73,7 +73,7 @@ public class Stage {
 		final Lock r = lock.readLock();
 	    r.lock();
 	    try {
-	    	g.drawString("TPS: " + radialShooterInstance.TPS + "      Score: " + score + "      Health: " + player.health + "/20", 5, RadialShooter.w.height - 7);
+	    	g.drawString("TPS: " + radialShooterInstance.TPS + "     Score: " + score + "      Health: " + player.health + "/20", 5, RadialShooter.w.height - 7);
 	    	entities.forEach(e -> e.render(g));
 	    }
 	    finally{

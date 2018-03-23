@@ -10,7 +10,7 @@ public class BulletEntity extends MovingEntity{
 	
 	public BulletEntity(Stage s){ super(s); }
 	
-	public BulletEntity(Stage s, double x, double y){ super(s, x, y); this.collisionBox.setLocation(x * 2, y * 2);}
+	public BulletEntity(Stage s, double x, double y){ super(s, x, y); this.collisionBox.setLocation(3, 3);}
 	
 	@Override
 	public void updateOnTick(){
@@ -22,7 +22,7 @@ public class BulletEntity extends MovingEntity{
 
 	@Override
 	public void render(Graphics g) {
-		g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + collisionBox.getX()), (int) (position.getY() + collisionBox.getY()));
+		g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + velocity.getX()*3), (int) (position.getY() + velocity.getY()*3));
 		
 		if(RadialShooter.renderDEBUG){
 			g.setColor(Color.red);
