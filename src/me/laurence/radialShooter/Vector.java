@@ -4,6 +4,8 @@ import java.awt.Rectangle;
 
 // Basically an implementation of Point but with doubles instead of ints with minor added functionality.
 public class Vector {
+	public final static Vector ORIGIN = new Vector(0,0);
+	
 	private double x, y;
 	
 	public Vector() {
@@ -63,16 +65,31 @@ public class Vector {
 	}
 	
 	public Vector getUnitVector() {
-		double dist = distance(new Vector(0,0));
+		double dist = distance(ORIGIN);
 		return new Vector(x/dist, y/dist);
 	}
 	
-	public void rotateRad(double radians) {
-		// TODO
+	public boolean isUnitVector() {
+		return distance(ORIGIN) == 1;
 	}
 	
-	public void rotateDeg(double degrees) {
-		rotateRad(Math.PI/180);
+	public Vector rotateRad(double radians, Vector v){
+		double oldX = x, oldY = y;
+		x = Math.cos(radians)*(oldX-v.x) - Math.sin(radians)*(oldY-v.y) + v.x;
+		y = Math.sin(radians)*(oldX-v.x) + Math.cos(radians)*(oldY-v.y) + v.y;
+		return this;
+	}
+	
+	public Vector rotateDeg(double degrees, Vector v){
+		return rotateRad(Math.PI*degrees/180, v);
+	}
+
+	public Vector rotateRad(double radians) {
+		return rotateRad(radians, new Vector(0,0));
+	}
+	
+	public Vector rotateDeg(double degrees) {
+		return rotateRad(Math.PI*degrees/180);
 	}
 	
 	public Vector getLocation() {
@@ -83,12 +100,22 @@ public class Vector {
 		return "(" + x + ", " + y + ")";
 	}
 	
+	public Vector negated() {
+		return new Vector(-x,-y);
+	}
+	
 	public static Rectangle convertToRectangle(Vector a, Vector b){
 		double x1 = a.x < b.x ? a.x : b.x, x2 = a.x > b.x ? a.x : b.x;
 		double y1 = a.y < b.y ? a.y : b.y, y2 = a.y > b.y ? a.y : b.y;
-		if(x2 - x1 == 0) x2 += 1;
-		if(y2 - y1 == 0) y2 += 1;
+		if(x2 - x1 == 0) { x2 += 1; x1 -= 1;}
+		if(y2 - y1 == 0) { y2 += 1; y1 -= 1;}
 		
 		return new Rectangle((int) x1, (int) y1, (int) (x2-x1), (int) (y2-y1));
+	}
+
+	public Vector scale(double d) {
+		x *= d;
+		y *= d;
+		return this;
 	}
 }

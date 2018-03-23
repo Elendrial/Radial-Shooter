@@ -10,7 +10,7 @@ public class BulletEntity extends MovingEntity{
 	
 	public BulletEntity(){ super(); }
 	
-	public BulletEntity(double x, double y){ super(x, y); this.collisionBox.setLocation(x * 2, y * 2);}
+	public BulletEntity(double x, double y){ super(x, y); this.collisionBox.setLocation(3, 3);}
 	
 	@Override
 	public void updateOnTick(){

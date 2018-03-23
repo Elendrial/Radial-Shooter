@@ -61,7 +61,7 @@ public class PlayerEntity extends BaseEntity implements IInputUser{
 	@Override
 	public void render(Graphics g) {
 		g.drawArc((int) (position.getX() - collisionBox.getX()/2), (int) (position.getY()-collisionBox.getY()/2), (int) collisionBox.getX(), (int) collisionBox.getY(), 0, 360);
-		g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + xRotOffset * collisionBox.getX()/2), (int) (position.getY() + yRotOffset * collisionBox.getY()/2));
+		g.drawLine((int) position.getX(), (int) position.getY(), (int) (position.getX() + xRotOffset * collisionBox.getX()/2 * 500), (int) (position.getY() + yRotOffset * collisionBox.getY()/2 * 500));
 	}
 	
 	public void setRotation(int rotation){

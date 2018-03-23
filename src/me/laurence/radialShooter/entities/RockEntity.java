@@ -40,7 +40,7 @@ public class RockEntity extends MovingEntity{
 			}
 			
 			if(e instanceof PlayerEntity){
-				// TODO: End of the game.
+				RadialShooter.instance.stage.reset();
 			}
 			
 		}

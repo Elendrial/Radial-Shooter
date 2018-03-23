@@ -47,6 +47,9 @@ public class RadialShooter implements Runnable{
 	public Stage stage;
 	public RadialShooter(){
 		stage = new Stage();
+		
+		RockEntity e = new RockEntity(new Vector(w.width-1,w.height/2));
+		stage.addEntity(e);
 	}
 
 	public void updateOnTick(){

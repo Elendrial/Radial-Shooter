@@ -68,5 +68,11 @@ public class Stage {
 		
 		return collidingWith;
 	}
+
+	public void reset() {
+		for(BaseEntity e : entities) {
+			if(!(e instanceof PlayerEntity)) removeEntity(e);
+		}
+	}
 	
 }
